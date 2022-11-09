@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div style="left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%)">
+    <h1>Log in</h1>
+
+    {% load crispy_forms_tags %} {#  need to load this before the form (part of django-crispy-forms)  #}
+
+    <form method="POST">
+      {% csrf_token %}
+
+      {{ form|crispy }}
+      {# using template variable "form" and passing it through filter called crispy (part of django-crispy-forms) #}
+
+      <button type="submit">
+        Login
+      </button>
+    </form>
+
+    <div>
+      If you do not have an account, <a href="/register">register</a> instead.
+    </div>
+  </div>
+
+{% endblock content %}
