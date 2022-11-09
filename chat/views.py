@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
 
@@ -11,5 +11,16 @@ def index(request):
 
 
 def login_view(request):
-    form = AuthenticationForm()
-    return render(request, 'chat/login.html', {'form': form})
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            return render(request, 'chat/login.html', {'form': form})
+        else:
+            return render(request, 'chat/login.html', {'form': form})
+    else:
+        form = AuthenticationForm()
+        return render(request, 'chat/login.html', {'form': form})
+
+
+def register_view(request):
+    return render(request, 'chat/register.html', {'form': UserCreationForm()})
