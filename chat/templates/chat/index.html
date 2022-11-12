@@ -4,6 +4,34 @@
 
   <div>
     <h1>Main page</h1>
+
+    <div>
+      <form
+          action="{% url 'chat:log_out' %}"
+          method="post"
+      >
+        {% csrf_token %}
+
+        <button
+            class="btn btn-primary"
+            type="submit"
+        >
+          Log out
+        </button>
+      </form>
+    </div>
+
+    <div>
+      <h2>Contacts</h2>
+
+      {% for user in user_list %}
+        <div>
+          {{ user.username }} ({{ user.pk }})
+        </div>
+
+      {% endfor %}
+    </div>
+
   </div>
 
 {% endblock content %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div>
+    <div id="chat-log" style="padding: 32px"></div>
+
+    <input id="chat-message-input" type="text" size="100"><br>
+
+    <input id="chat-message-submit" type="button" value="Send">
+
+    <script>
+      const chatSocket = configureChatWebSocket()
+
+      // We are focusing on the text input field as soon as the page is opened (placing caret, so we can start typing)
+      document.querySelector('#chat-message-input').focus()
+
+      // Allow to press "enter" button in addition to clicking the "submit" button
+      document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+          document.querySelector('#chat-message-submit').click()
+        }
+      }
+
+      // Here we are handling submit event (press enter or click on the "submit" button
+      // We will send the message to our WebSocket, it will in return pass it to our server
+      document.querySelector('#chat-message-submit').onclick = function() {
+        const messageInputDom = document.querySelector('#chat-message-input')
+        const message = messageInputDom.value
+
+        chatSocket.send(JSON.stringify({
+          'message': message
+        }))
+
+        // We are clearing the text input field after the message is submitted
+        messageInputDom.value = ''
+      }
+
+      // Here we are creating HTML element for our message and appending it to the main container
+      function createMessageNode(message, mainContainer) {
+        const messageContainer = document.createElement('div')
+
+        messageContainer.textContent = formatMessage(message)
+        messageContainer.style.margin = '8px'
+        messageContainer.style.padding = '8px'
+
+        mainContainer.appendChild(messageContainer)
+        mainContainer.appendChild(document.createElement('br'))
+      }
+
+      // Here are formatting the message text
+      function formatMessage(message) {
+        const messageFormatted = `${message}\n`
+
+        return messageFormatted
+      }
+
+      function configureChatWebSocket() {
+        // Accessing the data injected into the page using `json_script` filter
+
+        // Creating WebSocket with a specific URI: ws://127.0.0.1:8000/ws/chat in our case
+        const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat`)
+
+        // Every time WebSocket gets data from our server, this is triggered. We need to process the message
+        // and display it
+        chatSocket.onmessage = function(event) {
+          const data = JSON.parse(event.data)
+          const message = data.message
+
+          const mainContainer = document.querySelector('#chat-log')
+
+          createMessageNode(message, mainContainer)
+        }
+
+        chatSocket.onclose = function() {
+          console.error('Chat socket closed unexpectedly')
+        }
+
+        return chatSocket
+      }
+    </script>
+
+  </div>
+
+{% endblock content %}
