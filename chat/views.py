@@ -54,7 +54,13 @@ def room_view(request):
 
 def room_add(request):
     user_list = User.objects.exclude(pk=request.user.pk)
-    form = forms.RoomAddForm(user_list=user_list)
-
-    return render(request, 'chat/room_add.html', {'form': form})
+    if request.method == 'POST':
+        form = forms.RoomAddForm(request.POST, user_list=user_list)
+        if form.is_valid():
+            return redirect('chat:room_view')
+        else:
+            return render(request, 'chat/room_add.html', {'form': form})
+    else:
+        form = forms.RoomAddForm(user_list=user_list)
+        return render(request, 'chat/room_add.html', {'form': form})
 
