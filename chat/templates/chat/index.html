@@ -32,6 +32,23 @@
       {% endfor %}
     </div>
 
+    <div>
+      <h2>Group chats</h2>
+
+      {# We are using form here but GET method, this works the same was as <a href> - just a link to a new URL #}
+      <form
+          action="{% url 'chat:room_add' %}"
+          method="get"
+      >
+        <button type="submit">
+          Create room
+        </button>
+      </form>
+
+    </div>
+
+  </div>
+
   </div>
 
 {% endblock content %}

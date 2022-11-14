@@ -3,6 +3,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
+from chat import forms
+
 
 def index(request):
     user = request.user
@@ -48,3 +50,11 @@ def log_out(request):
 
 def room_view(request):
     return render(request, 'chat/room.html')
+
+
+def room_add(request):
+    user_list = User.objects.exclude(pk=request.user.pk)
+    form = forms.RoomAddForm(user_list=user_list)
+
+    return render(request, 'chat/room_add.html', {'form': form})
+

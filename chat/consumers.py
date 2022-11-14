@@ -8,10 +8,6 @@ disconnect_message = 'Disconnected!'
 
 class ChatConsumerAsyncWithChannelLayer(AsyncWebsocketConsumer):
     async def connect(self):
-        # hard-coded for now, we are always going to use only one room for now
-        # note that we are assigning this to self, this means we can access this variable anywhere outside `connect`
-        # method
-        # To be honest, this is a bad practice, as it reduces readability
         self.group_name = "room_%s" % 1
 
         await self.channel_layer.group_add(
