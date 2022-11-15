@@ -25,10 +25,11 @@
       <h2>Contacts</h2>
 
       {% for user in user_list %}
+      <a href="{% url 'chat:room_private_view' user_pk=user.pk %}">
         <div>
           {{ user.username }} ({{ user.pk }})
         </div>
-
+      </a>
       {% endfor %}
     </div>
 
