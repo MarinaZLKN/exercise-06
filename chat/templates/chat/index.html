@@ -37,10 +37,12 @@
 
       <div style="padding: 8px;">
         {% for room in room_list %}
+        <a href="{% url 'chat:room_view' pk=room.pk %}">
           <div>
             {{ room.name }} ({{ room.pk }})
           </div>
         {% endfor %}
+
       </div>
 
       <div style="padding: 8px;">
@@ -53,7 +55,6 @@
             Create room
           </button>
         </form>
-
       </div>
 
     </div>

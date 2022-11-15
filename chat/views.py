@@ -52,7 +52,7 @@ def log_out(request):
     return redirect('chat:login_view')
 
 
-def room_view(request):
+def room_view(request, pk):
     return render(request, 'chat/room.html')
 
 
