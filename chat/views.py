@@ -81,3 +81,22 @@ def room_add(request):
         form = forms.RoomAddForm(user_list=user_list)
         return render(request, 'chat/room_add.html', {'form': form})
 
+
+def room_private_view(request, user_pk):
+    user_current = request.user
+    user_contact = models.User.objects.get(pk=user_pk)
+
+    room_existing = models.Room.objects.filter(users=user_current, is_private=True).filter(users=user_contact).first()
+
+    if room_existing is not None:
+        return redirect('chat:room_view', pk=room_existing.pk)
+    else:
+        room_new = models.Room(
+            is_private=True
+        )
+        room_new.save()
+
+        room_new.users.add(user_current.pk)
+        room_new.users.add(user_contact.pk)
+
+        return redirect('chat:room_view', pk=room_new.pk)
