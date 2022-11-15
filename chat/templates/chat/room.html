@@ -57,14 +57,11 @@
         return messageFormatted
       }
 
-      function configureChatWebSocket() {
-        // Accessing the data injected into the page using `json_script` filter
+       function configureChatWebSocket() {
+        const roomPK = JSON.parse(document.getElementById('room_pk').textContent)
 
-        // Creating WebSocket with a specific URI: ws://127.0.0.1:8000/ws/chat in our case
-        const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat`)
+        const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${roomPK}`)
 
-        // Every time WebSocket gets data from our server, this is triggered. We need to process the message
-        // and display it
         chatSocket.onmessage = function(event) {
           const data = JSON.parse(event.data)
           const message = data.message
@@ -80,6 +77,7 @@
 
         return chatSocket
       }
+
     </script>
 
   </div>
