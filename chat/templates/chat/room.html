@@ -10,8 +10,12 @@
     <input id="chat-message-submit" type="button" value="Send">
 
     {{ room_pk|json_script:'room_pk' }}
+    {{ messages|json_script:'messages' }}
 
     <script>
+
+      showExistingMessages()
+
       const chatSocket = configureChatWebSocket()
 
       // We are focusing on the text input field as soon as the page is opened (placing caret, so we can start typing)
@@ -50,12 +54,19 @@
         mainContainer.appendChild(document.createElement('br'))
       }
 
-      // Here are formatting the message text
       function formatMessage(message) {
-        const messageFormatted = `${message}\n`
+      if (typeof message === 'string') {
+        return `${message}\n`
+      } else {
+        const dateFormatted = new Intl.DateTimeFormat('ru', {
+          hour:   'numeric',
+          minute: 'numeric'
+        })
+          .format(new Date(message.created))
 
-        return messageFormatted
+        return `${message.user.username} ${dateFormatted}: ${message.text}\n`
       }
+    }
 
        function configureChatWebSocket() {
         const roomPK = JSON.parse(document.getElementById('room_pk').textContent)
@@ -76,6 +87,13 @@
         }
 
         return chatSocket
+      }
+
+      function showExistingMessages() {
+        const mainContainer = document.querySelector('#chat-log')
+        const messages = JSON.parse(document.getElementById('messages').textContent)
+
+        messages.forEach(message => createMessageNode(message, mainContainer))
       }
 
     </script>

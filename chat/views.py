@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
-from chat import forms, models
+from chat import forms, models, serializers
 
 
 def index(request):
@@ -53,7 +53,12 @@ def log_out(request):
 
 
 def room_view(request, pk):
-    return render(request, 'chat/room.html', {'room_pk': pk})
+    messages_in_room = models.Message.objects.filter(room=pk)
+    messages_in_room_serialized = serializers.MessageSerializer(messages_in_room, many=True).data
+    return render(request, 'chat/room.html', {
+        'messages': messages_in_room_serialized,
+        'room_pk': pk
+    })
 
 
 def room_add(request):
