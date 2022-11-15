@@ -8,7 +8,8 @@ disconnect_message = 'Disconnected!'
 
 class ChatConsumerAsyncWithChannelLayer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.group_name = "room_%s" % 1
+        self.room_pk = self.scope['url_route']['kwargs']['pk']
+        self.group_name = "room_%s" % self.room_pk
 
         await self.channel_layer.group_add(
             self.group_name,

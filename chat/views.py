@@ -53,7 +53,7 @@ def log_out(request):
 
 
 def room_view(request, pk):
-    return render(request, 'chat/room.html')
+    return render(request, 'chat/room.html', {'room_pk': pk})
 
 
 def room_add(request):

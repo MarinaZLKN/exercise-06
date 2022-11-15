@@ -9,6 +9,8 @@
 
     <input id="chat-message-submit" type="button" value="Send">
 
+    {{ room_pk|json_script:'room_pk' }}
+
     <script>
       const chatSocket = configureChatWebSocket()
 
