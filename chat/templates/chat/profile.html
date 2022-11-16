@@ -1,0 +1,28 @@
+<!-- chat/templates/chat/profile.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div>
+    <h1>Profile</h1>
+
+    <div>
+      <div>
+        <h2>{{ user.username }}</h2>
+      </div>
+
+      <img
+          src="{{ user.profile.image.url }}"
+          style="width: 200px; height: 200px;"
+          alt="Profile image"
+      >
+
+      {% load crispy_forms_tags %}
+      {% crispy form_image_upload %}
+      {% crispy form_user_name_change %}
+    </div>
+  </div>
+
+{% endblock content %}
+

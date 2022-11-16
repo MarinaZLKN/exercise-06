@@ -105,3 +105,41 @@ def room_private_view(request, user_pk):
         room_new.users.add(user_contact.pk)
 
         return redirect('chat:room_view', pk=room_new.pk)
+
+
+def profile_view(request):
+    if request.method == 'POST':
+        profile = models.Profile.objects.get(user=request.user)
+
+        if 'image_upload' in request.POST:
+            form_image_upload = forms.ImageUploadForm(request.POST, request.FILES, instance=profile)
+
+            if form_image_upload.is_valid():
+                form_image_upload.save()
+
+                return render(request, 'chat/profile.html', {
+                    'form_image_upload': form_image_upload,
+                    'form_user_name_change': forms.UserNameChangeForm(instance=profile)
+                })
+
+        elif 'user_name_change' in request.POST:
+            form_user_name_change = forms.UserNameChangeForm(request.POST, instance=profile)
+
+            if form_user_name_change.is_valid():
+                form_user_name_change.save()
+
+                return render(request, 'chat/profile.html', {
+                    'form_image_upload': forms.ImageUploadForm(instance=profile),
+                    'form_user_name_change': forms.UserNameChangeForm(instance=profile)
+                })
+
+    else:
+        profile = models.Profile.objects.get(user=request.user)
+
+        form_image_upload = forms.ImageUploadForm(instance=profile)
+        form_user_name_change = forms.UserNameChangeForm(instance=profile)
+
+    return render(request, 'chat/profile.html', {
+        'form_image_upload': form_image_upload,
+        'form_user_name_change': form_user_name_change
+    })

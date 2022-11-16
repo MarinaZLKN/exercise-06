@@ -2,6 +2,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
 from django import forms
 
+from . import models
+
 class RoomAddForm(forms.Form):
     name = forms.CharField(label="Group name", required=True)
 
@@ -28,3 +30,32 @@ class RoomAddForm(forms.Form):
             ),
             Submit('submit', 'Create')
         )
+
+class UserNameChangeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'name',
+            Submit('user_name_change', 'Change')
+        )
+
+    class Meta:
+        model = models.Profile
+        fields = ['name']
+
+
+class ImageUploadForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'image',
+            Submit('image_upload', 'Upload')
+        )
+
+    class Meta:
+        model = models.Profile
+        fields = ['image']
