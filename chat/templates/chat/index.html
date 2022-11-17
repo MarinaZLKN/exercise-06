@@ -4,6 +4,9 @@
 
   <div>
     <h1>Main page</h1>
+    <form action="http://127.0.0.1:8000/profile_view">
+    <input type="submit" value="Profile Page" />
+</form>
 
     <div>
       <form
@@ -43,8 +46,7 @@
             {{ room.name }} ({{ room.pk }})
           </div>
         {% endfor %}
-
-      </div>
+        </div>
 
       <div style="padding: 8px;">
         {# We are using form here but GET method, this works the same was as <a href> - just a link to a new URL #}
@@ -56,7 +58,7 @@
             Create room
           </button>
         </form>
-      </div>
+        </div>
 
     </div>
 

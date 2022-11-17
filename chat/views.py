@@ -39,7 +39,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('chat:index')
+            return redirect('chat:profile_view')
         else:
             return render(request, 'chat/register.html', {'form': form})
     else:
